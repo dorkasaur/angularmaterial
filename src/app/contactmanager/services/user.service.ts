@@ -13,6 +13,14 @@ export class UserService {
     users: User[]
   };
 
+  addUser(user: User): Promise<User> {
+    return new Promise<User>((resolver, reject) => {
+      user.id = this.dataStore.users.length + 1;
+      this.dataStore.users.push(user);
+      this._users.next(Object.assign({}, this.dataStore).users);
+      resolver(user);
+    });
+  }
   constructor(private http: HttpClient) {
     this.dataStore = { users: [] };
     this._users = new BehaviorSubject<User[]>([]);
